@@ -37,7 +37,7 @@ func init() {
 	if tickerSymbol == "" {
 		log.Panic("Env var 'SYMBOL' is empty")
 	}
-	match, err := regexp.MatchString("^[A-Z0-9.]$", tickerSymbol)
+	match, err := regexp.MatchString("^[A-Z0-9.]+$", tickerSymbol)
 	if err != nil {
 		log.Panic("Unable to validate SYMBOL")
 	}
