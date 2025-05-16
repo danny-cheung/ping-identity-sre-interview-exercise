@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"regexp"
 	"slices"
 	"strconv"
 
@@ -36,6 +37,13 @@ func init() {
 	if tickerSymbol == "" {
 		log.Panic("Env var 'SYMBOL' is empty")
 	}
+	match, err := regexp.MatchString("^[A-Z0-9.]$", tickerSymbol)
+	if err != nil {
+		log.Panic("Unable to validate SYMBOL")
+	}
+	if !match {
+		log.Panic("Env var 'SYMBOL' is not valid.")
+	}
 
 	tickerDayString, found := os.LookupEnv("NDAYS")
 	if !found {
@@ -44,6 +52,9 @@ func init() {
 	tickerDays, err = strconv.Atoi(tickerDayString)
 	if err != nil {
 		log.Panicf("Unable to convert '%s' to int.", tickerDayString)
+	}
+	if tickerDays < 1 {
+		log.Panic("Env var NDAYS cannot be less than 1.")
 	}
 }
 
