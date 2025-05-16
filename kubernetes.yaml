@@ -14,7 +14,8 @@ spec:
     spec:
       containers:
       - name: stock-ticker
-        image: ko://github.com/danny-cheung/ping-identity-sre-interview-exercise
+        image: dann7387/ping-identity-sre-interview-exercise:latest
+        imagePullPolicy: Always
         env:
           - name: SYMBOL
             valueFrom:

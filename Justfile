@@ -30,11 +30,13 @@ kind-test: test
   @sleep 1
   @kubectl --context "{{kind_context}}" wait --namespace ingress-nginx --for=condition=ready pod --selector=app.kubernetes.io/component=controller --timeout=180s
 
-  # Build the binary, build the image, and deploy the app to KinD
-  @KO_DOCKER_REPO=kind.local KIND_CLUSTER_NAME="{{kind_cluster_name}}" ko apply -f kubernetes.yaml -- --context "{{kind_context}}" 
+  # Build the binary, build the image, and push image to Docker Hub
+  @KO_DOCKER_REPO=dann7387/ping-identity-sre-interview-exercise ko build --bare
+
+  # Deploy the app to Kubernetes
+  kubectl --context "{{kind_context}}" apply -f kubernetes.yaml
 
   @echo
   @echo "==========================================="
   @echo "App is accessible on http://localhost:30000"
   @echo "==========================================="
-  
