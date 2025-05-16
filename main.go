@@ -1,19 +1,14 @@
 package main
 
 import (
-	"net/http"
-
+	"github.com/danny-cheung/ping-identity-sre-interview-exercise/pkg/handlers"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
 	r := gin.Default()
 
-	r.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "Hello, world!",
-		})
-	})
+	r.GET("/", handlers.Ticker)
 
 	r.Run() // listen and serve on 0.0.0.0:8080
 }
