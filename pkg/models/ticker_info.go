@@ -7,9 +7,9 @@ type TickerInfo struct {
 }
 
 type TickerInfoDailyEntry struct {
-	Open   string `json:"open"`
-	High   string `json:"high"`
-	Low    string `json:"low"`
-	Close  string `json:"close"`
-	Volume string `json:"volume"`
+	Open   float64 `json:"open"`
+	High   float64 `json:"high"`
+	Low    float64 `json:"low"`
+	Close  float64 `json:"close"`
+	Volume float64 `json:"volume"`
 }
