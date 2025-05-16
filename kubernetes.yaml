@@ -17,12 +17,22 @@ spec:
         image: ko://github.com/danny-cheung/ping-identity-sre-interview-exercise
         env:
           - name: SYMBOL
-            value: TEAM
+            valueFrom:
+              configMapKeyRef:
+                name: stock-ticker-config
+                key: symbol
           - name: NDAYS
-            value: "2"
+            valueFrom:
+              configMapKeyRef:
+                name: stock-ticker-config
+                key: ndays
+          - name: APIKEY
+            valueFrom:
+              secretKeyRef:
+                name: stock-ticker-secret
+                key: apikey
 
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -51,3 +61,21 @@ spec:
                 name: stock-ticker
                 port:
                   number: 80
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: stock-ticker-secret
+type: Opaque
+data:
+  apikey: "QzIyN1dEOVczTFVWS1ZWOQ=="
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: stock-ticker-config
+data:
+  symbol: MSFT
+  ndays: "7"
