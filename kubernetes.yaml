@@ -1,0 +1,53 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stock-ticker
+spec:
+  selector:
+    matchLabels:
+      app: stock-ticker
+  template:
+    metadata:
+      labels:
+        app: stock-ticker
+    spec:
+      containers:
+      - name: stock-ticker
+        image: ko://github.com/danny-cheung/ping-identity-sre-interview-exercise
+        env:
+          - name: SYMBOL
+            value: TEAM
+          - name: NDAYS
+            value: "2"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: stock-ticker
+spec:
+  selector:
+    app: stock-ticker
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: stock-ticker-ingress
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: stock-ticker
+                port:
+                  number: 80
