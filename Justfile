@@ -17,8 +17,12 @@ test: fmt
 run: test
   go run main.go
 
-kind-test: test
+publish: test
+  # Build the binary, build the image, and push image to Docker Hub
   @ko version || brew install ko
+  @KO_DOCKER_REPO=dann7387/ping-identity-sre-interview-exercise ko build --bare
+
+kind-test: publish
   @docker --version || brew install docker
   @kind --version || brew install kind
   @kubectl version || brew install kubectl
@@ -29,9 +33,6 @@ kind-test: test
   @kubectl --context "{{kind_context}}" apply --filename https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/kind/deploy.yaml
   @sleep 1
   @kubectl --context "{{kind_context}}" wait --namespace ingress-nginx --for=condition=ready pod --selector=app.kubernetes.io/component=controller --timeout=180s
-
-  # Build the binary, build the image, and push image to Docker Hub
-  @KO_DOCKER_REPO=dann7387/ping-identity-sre-interview-exercise ko build --bare
 
   # Deploy the app to Kubernetes
   kubectl --context "{{kind_context}}" apply -f kubernetes.yaml
